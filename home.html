@@ -285,7 +285,7 @@
 			<div class="offcanvas-body">
 				<div class="radio style-3">
 					<label class="radio-label">
-						<input type="radio" checked="checked" name="radio2">
+						<input type="radio" name="radio2">
 						<span class="checkmark">
 							<span class="text">Female Only</span>
 						</span>
@@ -297,7 +297,7 @@
 						</span>
 					</label>
 					<label class="radio-label">
-						<input type="radio" name="radio2">
+						<input type="radio" checked="checked" name="radio2">
 						<span class="checkmark">
 							<span class="text">Show All</span>
 						</span>
@@ -330,7 +330,11 @@
 		document.addEventListener('DOMContentLoaded', function () {
 			initializeUserCards()
 		});
-		// (進階) 監聽篩選事件
+
+
+		// (進階) 
+
+		// 監聽篩選事件 (篩選窗格)
 		const filterBtn = document.querySelector("a.filter-icon"); // 篩選 icon		
 		const closeFilterBtn = document.querySelector("button.btn-close"); // 右上角 X 鍵
 		filterBtn.onclick = checkFilterEnd; // 開啟篩選窗格後，確認窗格是否被關閉
@@ -340,6 +344,24 @@
 				initializeUserCards();
 				return;
 			};
+			return;
+		}
+
+		//  監聽篩選事件 (性別篩選窗格)
+		const genderBtn = document.querySelector("a.btn.d-flex.align-items-center.justify-content-between.btn-primary.light.py-2.px-3.font-14");
+		const genderWindow = document.querySelectorAll("div.offcanvas-body")[1];
+		genderBtn.onclick = checkGender; // 開啟篩選窗格後，確認窗格是否被關閉
+		function checkGender(event) {
+			const mask = document.querySelectorAll("div.offcanvas-backdrop.fade")[1];
+			console.log(mask);
+			mask.onclick = () => {
+				const checkedRadio = genderWindow.querySelector('input[name="radio2"]:checked');
+				const genderResult = checkedRadio.closest('.radio-label').querySelector('.text').textContent;
+				const genderElem = document.querySelector("span.text-start.d-block");
+				genderElem.textContent = genderResult;
+				initializeUserCards();
+				return;
+			}
 			return;
 		}
 	</script>

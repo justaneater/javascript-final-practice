@@ -89,7 +89,7 @@ function clearSwipeHistory() {
 // 監聽自定義滑動事件
 document.addEventListener('userSwiped', function (event) {
     const swipeData = event.detail;
-    console.log('使用者滑動事件:', swipeData);
+    // console.log('使用者滑動事件:', swipeData);
 
     // 這裡可以添加更多的處理邏輯，例如：
     // - 發送到後端API

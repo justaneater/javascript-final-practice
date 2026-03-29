@@ -70,32 +70,68 @@ function renderUserCards(users) {
 // 我寫的
 
 
-// (進階) 根據條件篩選使用者
-function filterUsers(users, filters = {}) {
+// (進階) 
+
+// 取得篩選條件
+function getFilterInfo() {
+    console.log("獲取條件中...");
+    // 最大距離、最小年齡
+    const [maxDistanceElem, minAgeElem] = document.querySelectorAll(
+        "span.example-val.title.slider-margin-value-min",
+    );
+    // 最大年齡
+    const [, maxAgeElem] = document.querySelectorAll(
+        "span.example-val.title.slider-margin-value-max",
+    );
+    // 性別
+    const genderElem = document.querySelector("span.text-start.d-block");
+
+    const maxDistance = Number(maxDistanceElem.textContent.replace("km", ""));
+    const minAge = Number(minAgeElem.textContent);
+    const maxAge = Number(maxAgeElem.textContent.replace(" - ", ""));
+    const gender = genderElem.textContent;
+    const filterResult = {
+        maxDistance: maxDistance,
+        minAge: minAge,
+        maxAge: maxAge,
+        gender: gender,
+    };
+    return filterResult;
+}
+
+// 根據條件篩選使用者
+function filterUsers(users, filters={}) {
+    const {maxDistance, minAge, maxAge, gender} = filters;
     return users.filter(user => {
         // 距離篩選
-        if (filters.maxDistance && user.distance > filters.maxDistance) {
+        if (maxDistance && user.distance > maxDistance) {
             return false;
         }
-
         // 年齡篩選
-        if (filters.minAge && user.age < filters.minAge) {
+        if (minAge && user.age < minAge) {
             return false;
         }
-        if (filters.maxAge && user.age > filters.maxAge) {
+        if (maxAge && user.age > maxAge) {
             return false;
         }
-
+        // 性別篩選
+        const femaleOnly =
+            gender==="Female Only" && user.gender.toLowerCase()==="female";
+        const maleOnly =
+            gender==="Female Only" && user.gender.toLowerCase()==="female";
+        const allGender = gender==="Show All" && user.gender;
+        if (!femaleOnly && !maleOnly && !allGender) {
+            return false;
+        }
         // 興趣篩選
-        if (filters.interests && filters.interests.length > 0) {
-            const hasCommonInterest = user.interests.some(interest =>
-                filters.interests.includes(interest)
-            );
-            if (!hasCommonInterest) {
-                return false;
-            }
-        }
-
+        // if (filters.interests && filters.interests.length > 0) {
+        //     const hasCommonInterest = user.interests.some(interest =>
+        //         filters.interests.includes(interest)
+        //     );
+        //     if (!hasCommonInterest) {
+        //         return false;
+        //     }
+        // }
         return true;
     });
 }

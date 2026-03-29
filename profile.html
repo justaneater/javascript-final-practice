@@ -84,8 +84,8 @@
 				<div class="profile-area">
 					<div class="main-profile">
 						<div class="about-profile">
-							<div class="media rounded-circle">
-								<img src="../assets/images/user/pic1.jpg" alt="profile-image">
+							<div class="media rounded-circle" style="max-width: none;">
+								<div class="user-photo rounded-circle" id="userPhoto" style="background-image: url('../assets/images/user/pic1.jpg'); background-size: cover; background-position: center; width:145px; height:145px;"></div>
 								<svg class="radial-progress m-b20" data-percentage="40" viewBox="0 0 80 80">
 									<circle class="incomplete" cx="40" cy="40" r="35"></circle>
 									<circle class="complete" cx="40" cy="40" r="35"
@@ -252,9 +252,9 @@
 		// 更新頁面內容
 		function updateProfileContent(user) {
 			// 更新頭像
-			const mediaImg = document.querySelector('.media img');
-			mediaImg.src = user.image;
-			mediaImg.alt = user.name;
+			const userPhoto = document.getElementById("userPhoto");
+			const userImgUrl = user.image;
+			userPhoto.style.backgroundImage = `url('${userImgUrl.substring(2,userImgUrl.length)}')`;
 
 			// 更新基本資訊
 			document.querySelector('.profile-detail .name').textContent = `${user.name}, ${user.age}`;

@@ -217,7 +217,6 @@
 					location.href = "home.html";
 				},
 				1000);
-
 		};
 		loginBtn.addEventListener("click",checkLogin)
 
@@ -228,7 +227,27 @@
 			loginUserId.value = currentUserId;
 			loginEmail.value = currentUserEmail;
 		}
-		
+
+		// 4. Enter 鍵登入
+		document.addEventListener("keydown", function(event) {
+			if (event.key==="Enter") {
+				checkLogin();
+			}
+		});
+
+		// 5. 密碼顯示/隱藏切換
+		togglePassword.addEventListener("click", function() {
+			if (loginPassword.type === "password") {
+				togglePassword.classList.remove("icon-eye");
+				togglePassword.classList.add("icon-eye-off");
+				loginPassword.type="text";
+			} else {
+				togglePassword.classList.remove("icon-eye-off");
+				togglePassword.classList.add("icon-eye");
+				loginPassword.type="password";
+			}
+		});
+
 		// 我寫的
 
 		// 內建

@@ -9,10 +9,17 @@ async function initializeUserCards() {
             let filters = getFilterInfo(); // 取得篩選條件
             const filterResults = filterUsers(result.data, filters);
             console.log(`共 ${filterResults.length} 筆數據符合條件`);
+            const idSwiper = document.getElementById("swiper"); // 卡片區塊
+            if (!filterResults.length) {
+                const emptyCard = renderEmptyCards();
+                idSwiper.innerHTML = emptyCard;
+                return;
+            }
             // 拿到資料後打亂順序
             const shuffledUsers = shuffleArray(filterResults);
             // 把卡片渲染到頁面上
-            renderUserCards(shuffledUsers);
+            const userCards = renderUserCards(shuffledUsers);
+            idSwiper.innerHTML = userCards;
             // 啟用滑動偵測
             initSwipeDetection();
         }
@@ -25,9 +32,9 @@ async function initializeUserCards() {
 // 2.生成卡片並
 // 3.帶入fetch來的資料到卡片中並顯示
 function renderUserCards(users) {
-    const idSwiper = document.getElementById("swiper"); // 卡片區塊
+    let cards = "";
     for (let user of users) {
-        const userCard =` 
+        const card =` 
                     <div class="dzSwipe_card" data-user-id=${user.id} data-user-name=${user.name}>
                         <div class="dz-media">
                             <img src=${user.image} alt="">
@@ -66,9 +73,9 @@ function renderUserCards(users) {
                         </div>
                         <div class="dzSwipe_card__drag"></div>
                     </div>`;
-    idSwiper.innerHTML += userCard;
+        cards += card;
     }
-    return;
+    return cards;
 }
 
 // 我寫的
@@ -140,3 +147,13 @@ function filterUsers(users, filters={}) {
     });
 }
 
+// 生成卡片(無符合條件的用戶)
+function renderEmptyCards() {
+    const card =` 
+                <div class="dzSwipe_card" data-user-id="" data-user-name="">
+                    <div class="dz-media">
+                        <img src="./assets/images/error.png" alt="">
+                    </div>
+                </div>`;
+    return card;
+}

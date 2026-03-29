@@ -5,8 +5,12 @@ async function initializeUserCards() {
         // 1.fetch 資料
         const result = await fetchUserData(); // 用 await 等資料回來
         if (result.success && result.data.length > 0) {
+            // (進階) 根據預設條件篩選使用者
+            let filters = getFilterInfo(); // 取得篩選條件
+            const filterResults = filterUsers(result.data, filters);
+            console.log(`共 ${filterResults.length} 筆數據符合條件`);
             // 拿到資料後打亂順序
-            const shuffledUsers = shuffleArray(result.data);
+            const shuffledUsers = shuffleArray(filterResults);
             // 把卡片渲染到頁面上
             renderUserCards(shuffledUsers);
             // 啟用滑動偵測

@@ -330,6 +330,18 @@
 		document.addEventListener('DOMContentLoaded', function () {
 			initializeUserCards()
 		});
+		// (進階) 監聽篩選事件
+		const filterBtn = document.querySelector("a.filter-icon"); // 篩選 icon		
+		const closeFilterBtn = document.querySelector("button.btn-close"); // 右上角 X 鍵
+		filterBtn.onclick = checkFilterEnd; // 開啟篩選窗格後，確認窗格是否被關閉
+		function checkFilterEnd() {
+			// 按下右上角 X 鍵 -> 重新篩選卡片
+			closeFilterBtn.onclick = () => {
+				initializeUserCards();
+				return;
+			};
+			return;
+		}
 	</script>
 </body>
 

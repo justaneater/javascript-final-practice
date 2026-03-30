@@ -1,5 +1,6 @@
 // 我寫的
 
+const idSwiper = document.getElementById("swiper"); // 卡片區塊
 async function initializeUserCards() {
     try {
         // 1.fetch 資料
@@ -9,17 +10,15 @@ async function initializeUserCards() {
             let filters = getFilterInfo(); // 取得篩選條件
             const filterResults = filterUsers(result.data, filters);
             console.log(`共 ${filterResults.length} 筆數據符合條件`);
-            const idSwiper = document.getElementById("swiper"); // 卡片區塊
             if (!filterResults.length) {
-                const emptyCard = renderEmptyCards();
-                idSwiper.innerHTML = emptyCard;
+                idSwiper.innerHTML = renderEmptyCards();
                 return;
             }
             // 拿到資料後打亂順序
             const shuffledUsers = shuffleArray(filterResults);
             // 把卡片渲染到頁面上
             const userCards = renderUserCards(shuffledUsers);
-            idSwiper.innerHTML = userCards;
+            idSwiper.innerHTML = renderEmptyCards() + userCards;
             // 啟用滑動偵測
             initSwipeDetection();
         }
@@ -150,10 +149,19 @@ function filterUsers(users, filters={}) {
 // 生成卡片(無符合條件的用戶)
 function renderEmptyCards() {
     const card =` 
-                <div class="dzSwipe_card" data-user-id="" data-user-name="">
+                <div class="dzSwipe_card">
                     <div class="dz-media">
                         <img src="./assets/images/error.png" alt="">
                     </div>
                 </div>`;
     return card;
 }
+
+// 移除瀏覽過的卡片
+idSwiper.addEventListener("mousedown", function () {
+    const swipedCard = idSwiper.querySelector('div.dzSwipe_card.below');
+    if (swipedCard.dataset.userId) {
+        swipedCard.remove();
+    }
+    return;
+})

@@ -344,6 +344,12 @@
 				initializeUserCards();
 				return;
 			};
+			// 按下窗格以外區塊 -> 重新篩選卡片
+			const mask = document.querySelector("div.offcanvas-backdrop.fade");
+			mask.onclick = () => {
+				initializeUserCards();
+				return;
+			}
 			return;
 		}
 
@@ -352,8 +358,8 @@
 		const genderWindow = document.querySelectorAll("div.offcanvas-body")[1];
 		genderBtn.onclick = checkGender; // 開啟篩選窗格後，確認窗格是否被關閉
 		function checkGender(event) {
+			// 按下窗格以外區塊 -> 重新篩選卡片
 			const mask = document.querySelectorAll("div.offcanvas-backdrop.fade")[1];
-			console.log(mask);
 			mask.onclick = () => {
 				const checkedRadio = genderWindow.querySelector('input[name="radio2"]:checked');
 				const genderResult = checkedRadio.closest('.radio-label').querySelector('.text').textContent;

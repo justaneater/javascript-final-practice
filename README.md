@@ -17,8 +17,10 @@
 ├─ match.html             # 配對成功列表
 ├─ profile.html           # 個人頁面
 ├─ welcome.html           # 網頁入口
-└─ mock-api-data.json     # 待配對用戶資料
+├─ mock-api-data.json     # 待配對用戶資料
+└─ 原始資料.7z             # 從頭練習用壓縮檔
 ```
+
 ## 練習範圍
 #### `swipe.js`
 > 可參考 `app.js` 使用範例 (`loadAndDisplayUsers()`)

@@ -8,6 +8,8 @@ async function initializeUserCards() {
         if (result.success && result.data.length > 0) {
             // (進階) 根據預設條件篩選使用者
             let filters = getFilterInfo(); // 取得篩選條件
+            [filters.swipedId, filters.action] = loadSwipeHistory();
+            console.log(filters.swipedId);
             const filterResults = filterUsers(result.data, filters);
             console.log(`共 ${filterResults.length} 筆數據符合條件`);
             if (!filterResults.length) {
@@ -111,7 +113,7 @@ function getFilterInfo() {
 
 // 根據條件篩選使用者
 function filterUsers(users, filters={}) {
-    const {maxDistance, minAge, maxAge, gender} = filters;
+    const {maxDistance, minAge, maxAge, gender, swipedId, action} = filters;
     return users.filter(user => {
         // 距離篩選
         if (maxDistance && user.distance > maxDistance) {
@@ -123,6 +125,12 @@ function filterUsers(users, filters={}) {
         }
         if (maxAge && user.age > maxAge) {
             return false;
+        }
+        if (swipedId && swipedId.includes(String(user.id))) {
+            const userIndex = swipedId.indexOf(String(user.id));
+            if (action[userIndex]!="reject"){
+                return false;
+            }
         }
         // 性別篩選
         const femaleOnly =
@@ -160,7 +168,7 @@ function renderEmptyCards() {
 // 移除瀏覽過的卡片
 idSwiper.addEventListener("mousedown", function () {
     const swipedCard = idSwiper.querySelector('div.dzSwipe_card.below');
-    if (swipedCard.dataset.userId) {
+    if (swipedCard && swipedCard.dataset.userId) {
         swipedCard.remove();
     }
     return;

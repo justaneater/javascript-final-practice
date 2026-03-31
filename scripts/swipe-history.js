@@ -26,6 +26,13 @@ function recordSwipe(userId, userName, action, timestamp = new Date()) {
 function loadSwipeHistory() {
     const stored = sessionStorage.getItem('swipeHistory');
     if (stored) {
+        const users = JSON.parse(stored);
+        let userIdList = [];
+        let userActionList = [];
+        for (let user of users) {
+            userActionList.push(user.action);
+            userIdList.push(user.userId);
+        }
         try {
             swipeHistory = JSON.parse(stored);
             console.log('載入滑動歷史記錄:', swipeHistory.length, '筆記錄');
@@ -33,27 +40,27 @@ function loadSwipeHistory() {
             console.error('載入滑動歷史記錄失敗:', e);
             swipeHistory = [];
         }
+        return [userIdList,userActionList];
     }
 }
 
 
 // 監聽 DOM 變化來檢測卡片移除（被滑走）
 function initSwipeDetection() {
-    // 載入歷史記錄
-    loadSwipeHistory();
-
     // 使用 MutationObserver 監聽卡片狀態變化
     const observer = new MutationObserver(function (mutations) {
         mutations.forEach(function (mutation) {
             if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                // 載入歷史記錄
+                const [userIdList,] = loadSwipeHistory();
                 const card = mutation.target;
                 const classList = card.classList;
 
                 // 檢查是否有用戶資料
                 const userId = card.dataset.userId;
                 const userName = card.dataset.userName;
-
-                if (userId && userName) {
+                // 避免重複回傳
+                if (userId && userName && !userIdList.includes(userId)) {
                     // 檢測滑動方向
                     if (classList.contains('to-right')) {
                         recordSwipe(userId, userName, 'like');
@@ -87,12 +94,12 @@ function clearSwipeHistory() {
 
 
 // 監聽自定義滑動事件
-document.addEventListener('userSwiped', function (event) {
-    const swipeData = event.detail;
-    // console.log('使用者滑動事件:', swipeData);
+// document.addEventListener('userSwiped', function (event) {
+//     const swipeData = event.detail;
+//     console.log('使用者滑動事件:', swipeData);
 
-    // 這裡可以添加更多的處理邏輯，例如：
-    // - 發送到後端API
-    // - 更新UI統計
-    // - 推送通知等
-});
+//     // 這裡可以添加更多的處理邏輯，例如：
+//     // - 發送到後端API
+//     // - 更新UI統計
+//     // - 推送通知等
+// });
